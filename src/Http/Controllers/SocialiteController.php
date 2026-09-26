@@ -71,7 +71,7 @@ class SocialiteController
      */
     protected function resolve(string $name): array
     {
-        $panel = Filament::getCurrentOrDefaultPanel();
+        $panel = Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
 
         /** @var SocialitePlugin $plugin */
         $plugin = $panel->getPlugin('filament-socialite');

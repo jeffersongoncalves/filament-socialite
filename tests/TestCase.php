@@ -9,7 +9,6 @@ use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Infolists\InfolistsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
-use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
@@ -20,6 +19,7 @@ use JeffersonGoncalves\Filament\Socialite\Tests\Fixtures\User;
 use Laravel\Socialite\SocialiteServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -28,13 +28,13 @@ abstract class TestCase extends Orchestra
         return [
             BladeIconsServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
+            BladeCaptureDirectiveServiceProvider::class,
             LivewireServiceProvider::class,
             SupportServiceProvider::class,
             ActionsServiceProvider::class,
             FormsServiceProvider::class,
             InfolistsServiceProvider::class,
             NotificationsServiceProvider::class,
-            SchemasServiceProvider::class,
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             FilamentServiceProvider::class,

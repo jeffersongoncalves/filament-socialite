@@ -7,8 +7,8 @@
 # Filament Socialite
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jeffersongoncalves/filament-socialite.svg?style=flat-square)](https://packagist.org/packages/jeffersongoncalves/filament-socialite)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-socialite/tests.yml?branch=3.x&label=tests&style=flat-square)](https://github.com/jeffersongoncalves/filament-socialite/actions?query=workflow%3Atests+branch%3A3.x)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-socialite/pint.yml?branch=3.x&label=code%20style&style=flat-square)](https://github.com/jeffersongoncalves/filament-socialite/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3A3.x)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-socialite/tests.yml?branch=1.x&label=tests&style=flat-square)](https://github.com/jeffersongoncalves/filament-socialite/actions?query=workflow%3Atests+branch%3A1.x)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jeffersongoncalves/filament-socialite/pint.yml?branch=1.x&label=code%20style&style=flat-square)](https://github.com/jeffersongoncalves/filament-socialite/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3A1.x)
 [![Total Downloads](https://img.shields.io/packagist/dt/jeffersongoncalves/filament-socialite.svg?style=flat-square)](https://packagist.org/packages/jeffersongoncalves/filament-socialite)
 [![License](https://img.shields.io/packagist/l/jeffersongoncalves/filament-socialite.svg?style=flat-square)](LICENSE.md)
 
@@ -27,7 +27,7 @@ OAuth login for Filament panels powered by [Laravel Socialite](https://laravel.c
 You can install the package via composer:
 
 ```bash
-composer require jeffersongoncalves/filament-socialite:"^3.0"
+composer require jeffersongoncalves/filament-socialite:"^1.0"
 ```
 
 Publish and run the migration (skip it if you only want to match users by email, see `socialAccounts(false)` below):
