@@ -22,7 +22,7 @@ jobs:
       matrix:
         database: [sqlite, mysql, pgsql]
 
-    name: PHP 8.4 - Laravel 12 - ${{ matrix.database }}
+    name: PHP 8.4 - Laravel 13 - ${{ matrix.database }}
 
     services:
       mysql:
@@ -65,7 +65,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:^12.0" "orchestra/testbench:^10.0" --dev --no-interaction --no-update
+          composer require "laravel/framework:^13.0" "orchestra/testbench:^11.0" --dev --no-interaction --no-update
           composer update --prefer-stable --prefer-dist --no-interaction
 
       - name: Run tests (sqlite)
