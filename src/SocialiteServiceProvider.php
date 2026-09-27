@@ -11,9 +11,7 @@ class SocialiteServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('filament-socialite')
-            ->hasConfigFile()
             ->hasViews()
-            ->hasTranslations()
-            ->hasMigration('create_social_accounts_table');
+            ->hasTranslations();
     }
 }

@@ -39,6 +39,7 @@ abstract class TestCase extends Orchestra
             WidgetsServiceProvider::class,
             FilamentServiceProvider::class,
             SocialiteServiceProvider::class,
+            \JeffersonGoncalves\Socialite\SocialiteServiceProvider::class,
             \JeffersonGoncalves\Filament\Socialite\SocialiteServiceProvider::class,
             TestPanelProvider::class,
         ];
@@ -72,6 +73,6 @@ abstract class TestCase extends Orchestra
             $table->timestamps();
         });
 
-        (include __DIR__.'/../database/migrations/create_social_accounts_table.php.stub')->up();
+        (include __DIR__.'/../vendor/jeffersongoncalves/laravel-socialite/database/migrations/create_social_accounts_table.php.stub')->up();
     }
 }

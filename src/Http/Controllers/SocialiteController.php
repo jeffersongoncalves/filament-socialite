@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 use JeffersonGoncalves\Filament\Socialite\Provider;
 use JeffersonGoncalves\Filament\Socialite\SocialitePlugin;
 use Laravel\Socialite\Contracts\Provider as SocialiteProvider;
-use Laravel\Socialite\Facades\Socialite;
-use Laravel\Socialite\Two\AbstractProvider;
 use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 use Throwable;
@@ -85,21 +83,7 @@ class SocialiteController
 
     protected function driver(Panel $panel, SocialitePlugin $plugin, Provider $provider): SocialiteProvider
     {
-        $driver = Socialite::driver($provider->getName());
-
-        // ponytail: scopes/params/stateless only exist on OAuth2 drivers; OAuth1 drivers use their services config as-is
-        if ($driver instanceof AbstractProvider) {
-            $driver
-                ->redirectUrl($plugin->getCallbackUrl($provider, $panel))
-                ->scopes($provider->getScopes())
-                ->with($provider->getWith());
-
-            if ($provider->isStateless()) {
-                $driver->stateless();
-            }
-        }
-
-        return $driver;
+        return $provider->driver($plugin->getCallbackUrl($provider, $panel));
     }
 
     protected function fail(Panel $panel, string $message): RedirectResponse
