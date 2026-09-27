@@ -30,17 +30,19 @@ You can install the package via composer:
 composer require jeffersongoncalves/filament-socialite:"^2.0"
 ```
 
+User resolution, the `social_accounts` table and the base `Provider` come from [jeffersongoncalves/laravel-socialite](https://github.com/jeffersongoncalves/laravel-socialite), installed automatically.
+
 Publish and run the migration (skip it if you only want to match users by email, see `socialAccounts(false)` below):
 
 ```bash
-php artisan vendor:publish --tag="filament-socialite-migrations"
+php artisan vendor:publish --tag="socialite-migrations"
 php artisan migrate
 ```
 
 Optionally publish the config and translations:
 
 ```bash
-php artisan vendor:publish --tag="filament-socialite-config"
+php artisan vendor:publish --tag="socialite-config"
 php artisan vendor:publish --tag="filament-socialite-translations"
 ```
 
@@ -121,14 +123,9 @@ After login the social account is linked (tokens are stored encrypted). Users im
 
 > **Security:** step 3 trusts the email returned by the provider. Only enable providers that verify emails, or use `resolveUserUsing()` to add your own checks.
 
-### Reusing outside Filament
+### Outside Filament
 
-`SocialiteUserResolver`, `Provider` and the `SocialAccount` model have no Filament dependency, so you can use them in any Laravel controller:
-
-```php
-$resolver = new SocialiteUserResolver(User::class, registrationEnabled: true);
-$user = $resolver->resolve(Provider::make('github'), Socialite::driver('github')->user());
-```
+Need the same login flow in a non-Filament app (Blade, Inertia, API)? Use [jeffersongoncalves/laravel-socialite](https://github.com/jeffersongoncalves/laravel-socialite) directly.
 
 ## Testing
 

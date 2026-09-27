@@ -1,9 +1,7 @@
 <?php
 
-use JeffersonGoncalves\Filament\Socialite\Models\SocialAccount;
-use JeffersonGoncalves\Filament\Socialite\Provider;
-use JeffersonGoncalves\Filament\Socialite\SocialiteUserResolver;
 use JeffersonGoncalves\Filament\Socialite\Tests\Fixtures\User;
+use JeffersonGoncalves\Socialite\Models\SocialAccount;
 use Laravel\Socialite\Contracts\Provider as SocialiteProvider;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\User as OAuthUser;
@@ -84,33 +82,4 @@ it('sends the user back to login when the provider fails', function () {
     $this->get('/admin/oauth/github/callback')->assertRedirect('http://localhost/admin/login');
 
     expect(auth()->check())->toBeFalse();
-});
-
-describe('SocialiteUserResolver', function () {
-    it('does not create users when registration is disabled', function () {
-        $resolver = new SocialiteUserResolver(User::class);
-
-        expect($resolver->resolve(Provider::make('github'), fakeOAuthUser()))->toBeNull()
-            ->and(User::query()->count())->toBe(0);
-    });
-
-    it('matches by email without the social accounts table', function () {
-        $user = User::query()->create(['name' => 'Jane', 'email' => 'jane@example.com', 'password' => 'x']);
-        $resolver = new SocialiteUserResolver(User::class, socialAccounts: false);
-
-        $resolver->link($user, Provider::make('github'), fakeOAuthUser());
-
-        expect($resolver->resolve(Provider::make('github'), fakeOAuthUser())->is($user))->toBeTrue()
-            ->and(SocialAccount::query()->count())->toBe(0);
-    });
-
-    it('delegates to custom callbacks', function () {
-        $resolver = new SocialiteUserResolver(
-            User::class,
-            registrationEnabled: true,
-            createUserUsing: fn ($oauthUser) => User::query()->create(['name' => 'Custom', 'email' => $oauthUser->getEmail(), 'password' => 'x']),
-        );
-
-        expect($resolver->resolve(Provider::make('github'), fakeOAuthUser())->name)->toBe('Custom');
-    });
 });
