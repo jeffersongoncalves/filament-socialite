@@ -13,8 +13,7 @@ use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use JeffersonGoncalves\Filament\Socialite\Tests\Fixtures\TestPanelProvider;
 use JeffersonGoncalves\Filament\Socialite\Tests\Fixtures\User;
 use Laravel\Socialite\SocialiteServiceProvider;
@@ -23,6 +22,8 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    use RefreshDatabase;
+
     protected function getPackageProviders($app): array
     {
         return [
@@ -48,11 +49,7 @@ abstract class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
-        config()->set('database.connections.testing', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
+        config()->set('database.connections.testing', $this->databaseConnection());
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         config()->set('auth.providers.users.model', User::class);
         config()->set('services.github', [
@@ -62,17 +59,44 @@ abstract class TestCase extends Orchestra
         ]);
     }
 
+    /**
+     * In-memory SQLite locally; CI sets SOCIALITE_TEST_DB_* to run against MySQL and PostgreSQL.
+     * Not the plain DB_* names: Testbench sets DB_CONNECTION=testing itself.
+     *
+     * @return array<string, mixed>
+     */
+    protected function databaseConnection(): array
+    {
+        $driver = env('SOCIALITE_TEST_DB_DRIVER', 'sqlite');
+
+        if ($driver === 'sqlite') {
+            return ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => ''];
+        }
+
+        return [
+            'driver' => $driver,
+            'host' => env('SOCIALITE_TEST_DB_HOST', '127.0.0.1'),
+            'port' => env('SOCIALITE_TEST_DB_PORT'),
+            'database' => env('SOCIALITE_TEST_DB_DATABASE', 'testing'),
+            'username' => env('SOCIALITE_TEST_DB_USERNAME', 'root'),
+            'password' => env('SOCIALITE_TEST_DB_PASSWORD', ''),
+            'charset' => $driver === 'pgsql' ? 'utf8' : 'utf8mb4',
+            'prefix' => '',
+        ];
+    }
+
     protected function defineDatabaseMigrations(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
+        // laravel-socialite ships a .php.stub; copy it next to the users migration so the migrator runs both in order.
+        $path = sys_get_temp_dir().'/filament-socialite-migrations';
 
-        (include __DIR__.'/../vendor/jeffersongoncalves/laravel-socialite/database/migrations/create_social_accounts_table.php.stub')->up();
+        if (! is_dir($path)) {
+            mkdir($path, 0755, true);
+        }
+
+        copy(__DIR__.'/database/migrations/0000_00_00_000000_create_users_table.php', $path.'/0000_00_00_000000_create_users_table.php');
+        copy(__DIR__.'/../vendor/jeffersongoncalves/laravel-socialite/database/migrations/create_social_accounts_table.php.stub', $path.'/0000_00_00_000001_create_social_accounts_table.php');
+
+        $this->loadMigrationsFrom($path);
     }
 }

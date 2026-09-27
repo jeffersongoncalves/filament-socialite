@@ -1,6 +1,6 @@
 <div class="filament-hidden">
 
-<!-- banner: art/jeffersongoncalves-filament-socialite.png (generate via portfolio-banner skill) -->
+![Filament Socialite](https://raw.githubusercontent.com/jeffersongoncalves/filament-socialite/3.x/art/jeffersongoncalves-filament-socialite.png)
 
 </div>
 
