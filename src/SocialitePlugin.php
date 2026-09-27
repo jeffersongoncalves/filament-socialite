@@ -9,6 +9,7 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 use JeffersonGoncalves\Filament\Socialite\Http\Controllers\SocialiteController;
+use JeffersonGoncalves\Socialite\SocialiteUserResolver;
 use Laravel\Socialite\Contracts\User;
 
 class SocialitePlugin implements Plugin
