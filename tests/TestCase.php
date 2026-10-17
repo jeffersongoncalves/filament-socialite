@@ -16,12 +16,14 @@ use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use JeffersonGoncalves\Filament\Socialite\Tests\Fixtures\TestPanelProvider;
 use JeffersonGoncalves\Filament\Socialite\Tests\Fixtures\User;
+use JeffersonGoncalves\PestPluginDatabaseMigrations\LoadsPackageMigrations;
 use Laravel\Socialite\SocialiteServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    use LoadsPackageMigrations;
     use RefreshDatabase;
 
     protected function getPackageProviders($app): array
@@ -87,16 +89,7 @@ abstract class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        // laravel-socialite ships a .php.stub; copy it next to the users migration so the migrator runs both in order.
-        $path = sys_get_temp_dir().'/filament-socialite-migrations';
-
-        if (! is_dir($path)) {
-            mkdir($path, 0755, true);
-        }
-
-        copy(__DIR__.'/database/migrations/0000_00_00_000000_create_users_table.php', $path.'/0000_00_00_000000_create_users_table.php');
-        copy(__DIR__.'/../vendor/jeffersongoncalves/laravel-socialite/database/migrations/create_social_accounts_table.php.stub', $path.'/0000_00_00_000001_create_social_accounts_table.php');
-
-        $this->loadMigrationsFrom($path);
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        $this->loadPackageMigrations(\JeffersonGoncalves\Socialite\SocialiteServiceProvider::class);
     }
 }
